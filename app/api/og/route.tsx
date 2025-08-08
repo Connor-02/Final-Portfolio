@@ -1,9 +1,9 @@
-import { ImageResponse } from 'next/server';
+import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge'; // required for OG images
+export const runtime = 'edge';
 
 export async function GET() {
-  return new ImageResponse(
+  return ImageResponse(
     (
       <div
         style={{
@@ -14,16 +14,13 @@ export async function GET() {
           justifyContent: 'center',
           fontSize: 64,
           fontWeight: 700,
-          background: 'linear-gradient(135deg, #f0a, #09f)',
+          background: 'linear-gradient(135deg, #ff7ab6, #6aa8ff)',
           color: 'white',
         }}
       >
-        My Open Graph Image
+        Portfolio
       </div>
     ),
-    {
-      width: 1200,
-      height: 630,
-    }
+    { width: 1200, height: 630 }
   );
 }
