@@ -2,26 +2,33 @@
 
 import { useState, useMemo } from "react";
 import { projects } from "@/data/projects";
+import { siteConfig } from "@/site.config";
 import { ProjectCard } from "@/components/ProjectCard";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function HomePage() {
+export default function ProjectsPage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const filteredProjects = useMemo(() => {
     if (!selectedTag) return projects;
-    return projects.filter((p) => p.tags.includes(selectedTag));
+    return projects.filter(project => project.tags.includes(selectedTag));
   }, [selectedTag]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    projects.forEach((p) => p.tags.forEach((t) => tags.add(t)));
+    projects.forEach(project => {
+      project.tags.forEach(tag => tags.add(tag));
+    });
     return Array.from(tags).sort();
   }, []);
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <h1 className="gradient-text text-4xl font-bold mb-4">Projects</h1>
         <p className="text-lg text-black/70 mb-8">
           A collection of my work focused on security, automation, and delightful user experiences.
@@ -36,14 +43,17 @@ export default function HomePage() {
         transition={{ delay: 0.1, duration: 0.6 }}
       >
         <div className="flex flex-wrap gap-3">
-          <button onClick={() => setSelectedTag(null)} className={`tag-filter ${!selectedTag ? "active" : ""}`}>
+          <button
+            onClick={() => setSelectedTag(null)}
+            className={tag-filter ${!selectedTag ? 'active' : ''}}
+          >
             All Projects
           </button>
           {allTags.map((tag) => (
             <button
               key={tag}
               onClick={() => setSelectedTag(tag)}
-              className={`tag-filter ${selectedTag === tag ? "active" : ""}`}
+              className={tag-filter ${selectedTag === tag ? 'active' : ''}}
             >
               {tag}
             </button>
@@ -51,8 +61,7 @@ export default function HomePage() {
         </div>
         {selectedTag && (
           <p className="mt-4 text-sm text-black/60">
-            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} tagged with "
-            {selectedTag}"
+            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} tagged with "{selectedTag}"
           </p>
         )}
       </motion.div>
@@ -60,7 +69,7 @@ export default function HomePage() {
       {/* Projects Grid */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={selectedTag || "all"}
+          key={selectedTag || 'all'}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -74,24 +83,23 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              {/* Convert readonly tags -> mutable array for ProjectCard prop type */}
-              <ProjectCard
-                slug={project.slug}
-                title={project.title}
-                summary={project.summary}
-                tags={[...project.tags]}
-                links={project.links}
-                image={project.image}
-              />
+              <ProjectCard {...project} />
             </motion.div>
           ))}
         </motion.div>
       </AnimatePresence>
 
       {filteredProjects.length === 0 && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-12"
+        >
           <p className="text-lg text-black/60">No projects found with the selected tag.</p>
-          <button onClick={() => setSelectedTag(null)} className="mt-4 text-brand-pink hover:underline">
+          <button
+            onClick={() => setSelectedTag(null)}
+            className="mt-4 text-brand-pink hover:underline"
+          >
             View all projects
           </button>
         </motion.div>
