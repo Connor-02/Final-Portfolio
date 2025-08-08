@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { projects } from "@/data/projects";
-import { siteConfig } from "@/site.config";
 import { ProjectCard } from "@/components/ProjectCard";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -11,13 +10,13 @@ export default function ProjectsPage() {
 
   const filteredProjects = useMemo(() => {
     if (!selectedTag) return projects;
-    return projects.filter(project => project.tags.includes(selectedTag));
+    return projects.filter((project) => project.tags.includes(selectedTag));
   }, [selectedTag]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    projects.forEach(project => {
-      project.tags.forEach(tag => tags.add(tag));
+    projects.forEach((project) => {
+      project.tags.forEach((tag) => tags.add(tag));
     });
     return Array.from(tags).sort();
   }, []);
@@ -45,7 +44,7 @@ export default function ProjectsPage() {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setSelectedTag(null)}
-            className={`tag-filter ${!selectedTag ? 'active' : ''}`}
+            className={`tag-filter ${!selectedTag ? "active" : ""}`}
           >
             All Projects
           </button>
@@ -53,7 +52,7 @@ export default function ProjectsPage() {
             <button
               key={tag}
               onClick={() => setSelectedTag(tag)}
-              className={`tag-filter ${selectedTag === tag ? 'active' : ''}`}
+              className={`tag-filter ${selectedTag === tag ? "active" : ""}`}
             >
               {tag}
             </button>
@@ -61,7 +60,8 @@ export default function ProjectsPage() {
         </div>
         {selectedTag && (
           <p className="mt-4 text-sm text-black/60">
-            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} tagged with "{selectedTag}"
+            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} tagged
+            with "{selectedTag}"
           </p>
         )}
       </motion.div>
@@ -69,7 +69,7 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={selectedTag || 'all'}
+          key={selectedTag || "all"}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -83,23 +83,20 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <ProjectCard {...project} />
+              {/* Coerce readonly tags -> mutable array to satisfy ProjectCard types */}
+              <ProjectCard
+                {...project}
+                tags={Array.from(project.tags ?? [])}
+              />
             </motion.div>
           ))}
         </motion.div>
       </AnimatePresence>
 
       {filteredProjects.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
           <p className="text-lg text-black/60">No projects found with the selected tag.</p>
-          <button
-            onClick={() => setSelectedTag(null)}
-            className="mt-4 text-brand-pink hover:underline"
-          >
+          <button onClick={() => setSelectedTag(null)} className="mt-4 text-brand-pink hover:underline">
             View all projects
           </button>
         </motion.div>
