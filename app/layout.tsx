@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { siteConfig } from "@/site.config";
-import { CommandPalette } from "@/components/CommandPalette";
+import { ClientCommandPalette } from "@/components/ClientCommandPalette";
 
 export const metadata: Metadata = {
   title: {
@@ -69,15 +69,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="/resume" className="hover:text-brand-pink transition-colors">Resume</a>
               <a href="/contact" className="hover:text-brand-pink transition-colors">Contact</a>
             </nav>
-            <button
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm rounded-full border border-gray-200 hover:border-gray-300 transition-colors"
-              onClick={() => {
-                // Command palette will be triggered by keyboard shortcut
-              }}
-            >
-              <span className="text-gray-500">⌘K</span>
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm rounded-full border border-gray-200 text-gray-500">
+              <span>⌘K</span>
               <span className="text-gray-700">Search</span>
-            </button>
+            </div>
           </div>
         </header>
         <main className="min-h-screen">{children}</main>
@@ -95,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </footer>
-        <CommandPalette />
+        <ClientCommandPalette />
       </body>
     </html>
   );
