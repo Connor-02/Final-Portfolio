@@ -15,7 +15,7 @@ export function ProjectCard({
 }: {
   title: string;
   summary: string;
-  tags?: string[];
+  tags?: readonly string[];
   links: { github?: string; live?: string };
   image?: string;
   slug: string;
