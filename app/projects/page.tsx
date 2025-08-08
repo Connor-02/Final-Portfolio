@@ -5,29 +5,23 @@ import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/ProjectCard";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function ProjectsPage() {
+export default function HomePage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const filteredProjects = useMemo(() => {
     if (!selectedTag) return projects;
-    return projects.filter((project) => project.tags.includes(selectedTag));
+    return projects.filter((p) => p.tags.includes(selectedTag));
   }, [selectedTag]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    projects.forEach((project) => {
-      project.tags.forEach((tag) => tags.add(tag));
-    });
+    projects.forEach((p) => p.tags.forEach((t) => tags.add(t)));
     return Array.from(tags).sort();
   }, []);
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <h1 className="gradient-text text-4xl font-bold mb-4">Projects</h1>
         <p className="text-lg text-black/70 mb-8">
           A collection of my work focused on security, automation, and delightful user experiences.
@@ -42,10 +36,7 @@ export default function ProjectsPage() {
         transition={{ delay: 0.1, duration: 0.6 }}
       >
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => setSelectedTag(null)}
-            className={`tag-filter ${!selectedTag ? "active" : ""}`}
-          >
+          <button onClick={() => setSelectedTag(null)} className={`tag-filter ${!selectedTag ? "active" : ""}`}>
             All Projects
           </button>
           {allTags.map((tag) => (
@@ -60,8 +51,8 @@ export default function ProjectsPage() {
         </div>
         {selectedTag && (
           <p className="mt-4 text-sm text-black/60">
-            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} tagged
-            with "{selectedTag}"
+            Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} tagged with "
+            {selectedTag}"
           </p>
         )}
       </motion.div>
@@ -83,10 +74,14 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              {/* Coerce readonly tags -> mutable array to satisfy ProjectCard types */}
+              {/* Convert readonly tags -> mutable array for ProjectCard prop type */}
               <ProjectCard
-                {...project}
-                tags={Array.from(project.tags ?? [])}
+                slug={project.slug}
+                title={project.title}
+                summary={project.summary}
+                tags={[...project.tags]}
+                links={project.links}
+                image={project.image}
               />
             </motion.div>
           ))}
