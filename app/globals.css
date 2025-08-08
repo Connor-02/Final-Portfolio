@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 0 0% 100%;
+  --fg: 222 47% 11%;
+  --muted: 220 14% 96%;
+  --card: 0 0% 100%;
+  --brand-pink: 322 100% 75%; /* #FF80BF-ish */
+  --brand-blue: 213 92% 79%;  /* #8EC5FC-ish */
+}
+
+.dark {
+  --bg: 222 47% 7%;
+  --fg: 210 40% 98%;
+  --muted: 222 47% 10%;
+  --card: 222 47% 8%;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: hsl(var(--bg));
+  color: hsl(var(--fg));
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, hsl(var(--brand-pink)), hsl(var(--brand-blue)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  @apply rounded-2xl bg-card shadow-brand-glow border border-black/5;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--brand-blue));
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Command palette styles */
+[cmdk-dialog] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20vh 1rem 0;
+}
+
+[cmdk-input] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-bottom: 12px;
+}
+
+[cmdk-list] {
+  max-height: 400px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  transition: 100ms ease;
+  border-radius: 8px;
+}
+
+[cmdk-item] {
+  content-visibility: auto;
+  cursor: pointer;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  color: rgba(255, 255, 255, 0.8);
+  user-select: none;
+  will-change: background, color;
+  transition: all 150ms ease;
+  transition-property: none;
+}
+
+[cmdk-item][data-selected="true"] {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+[cmdk-item][data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+[cmdk-empty] {
+  font-size: 14px;
+  padding: 32px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Glass header effect */
+.glass-header {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Tag filter styles */
+.tag-filter {
+  @apply inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full border transition-all duration-200;
+}
+
+.tag-filter.active {
+  @apply bg-gradient-to-r from-brand-pink/20 to-brand-blue/20 border-brand-pink/30 text-brand-pink;
+}
+
+.tag-filter:not(.active) {
+  @apply bg-white/50 border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300;
+}
+
+/* Print styles for resume */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
